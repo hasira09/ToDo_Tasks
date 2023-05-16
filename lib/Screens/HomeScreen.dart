@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:todo_tasks/Constants/Colours.dart';
 
 import '../Model/todo.dart';
@@ -25,13 +24,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        image: DecorationImage(
-            image: AssetImage("assets/Images/BackgroundImage.png"),
-            fit: BoxFit.cover),
-      ),
-      child: Scaffold(
+    return Scaffold(
         backgroundColor: tBGColor,
         appBar: _buildAppBar(),
         body: Stack(
@@ -124,7 +117,6 @@ class _HomeScreenState extends State<HomeScreen> {
             )
           ],
         ),
-      ),
     );
   }
 
