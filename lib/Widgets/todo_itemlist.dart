@@ -5,15 +5,21 @@ import '../Model/todo.dart';
 
 class ToDoList extends StatelessWidget {
   final ToDo todo;
+  final onToDoChanged;
+  final onDeleteItem;
 
-  const ToDoList({Key? key, required this.todo}) : super(key: key);
+  const ToDoList(
+      {Key? key, required this.todo, this.onToDoChanged, this.onDeleteItem})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(bottom: 20),
       child: ListTile(
-        onTap: () {},
+        onTap: () {
+          onToDoChanged(todo);
+        },
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
         ),
@@ -27,23 +33,47 @@ class ToDoList extends StatelessWidget {
           style: TextStyle(
               fontSize: 16,
               color: tBlack,
-              decoration: todo.isDone ? TextDecoration.lineThrough : null),
+              decoration: todo.isDone ? TextDecoration.none : null),
         ),
-        trailing: Container(
-          padding: const EdgeInsets.all(0),
-          margin: const EdgeInsets.symmetric(vertical: 12),
-          height: 35,
-          width: 35,
-          decoration: BoxDecoration(
-            color: tRed,
-            borderRadius: BorderRadius.circular(5),
-          ),
-          child: IconButton(
-            color: Colors.white,
-            iconSize: 18,
-            icon: const Icon(Icons.delete_rounded),
-            onPressed: () {},
-          ),
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(0),
+              margin: const EdgeInsets.symmetric(vertical: 12),
+              height: 35,
+              width: 35,
+              decoration: BoxDecoration(
+                color: tRed,
+                borderRadius: BorderRadius.circular(5),
+              ),
+              child: IconButton(
+                color: Colors.white,
+                iconSize: 18,
+                icon: const Icon(Icons.delete_rounded),
+                onPressed: () {
+                  onDeleteItem(todo.id);
+                },
+              ),
+            ),
+            const SizedBox(width: 8),
+            Container(
+              padding: const EdgeInsets.all(0),
+              margin: const EdgeInsets.symmetric(vertical: 12),
+              height: 35,
+              width: 35,
+              decoration: BoxDecoration(
+                color: tBlue,
+                borderRadius: BorderRadius.circular(5),
+              ),
+              child: IconButton(
+                color: Colors.white,
+                iconSize: 18,
+                icon: const Icon(Icons.notification_add_rounded),
+                onPressed: () {},
+              ),
+            )
+          ],
         ),
       ),
     );
