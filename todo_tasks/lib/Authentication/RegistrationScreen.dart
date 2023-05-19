@@ -1,5 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:todo_tasks/Services/AuthServices.dart';
+import '../Screens/HomeScreen.dart';
+import '../Services/Globals.dart';
 import 'LoginScreen.dart';
+import 'package:http/http.dart' as http;
 
 class RegistrationScreen extends StatefulWidget {
   const RegistrationScreen({Key? key}) : super(key: key);
@@ -73,6 +79,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 height: 20,
               ),
               TextField(
+                obscureText: true,
                 decoration: InputDecoration(
                   hintText: "Enter Password",
                   border: OutlineInputBorder(
@@ -160,5 +167,24 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     );
   }
 
-  createAccountPressed() {}
+  createAccountPressed() async {
+    bool emailValid = RegExp(
+        r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+        .hasMatch(_email);
+    if (emailValid) {
+      http.Response response = await AuthServices.register(
+          _name, _email, _password);
+      Map responseMap = jsonDecode(response.body);
+      if (response.statusCode==200){
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => const HomeScreen()));
+      }else{
+        errorSnackBar(context, responseMap.values.first[0]);
+      }
+    }else{
+      errorSnackBar(context, 'Email not Valid');
+    }
+  }
 }
