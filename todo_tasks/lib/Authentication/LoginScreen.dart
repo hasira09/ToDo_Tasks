@@ -1,5 +1,10 @@
-import 'package:flutter/material.dart';
+import 'dart:convert';
 
+import 'package:flutter/material.dart';
+import 'package:todo_tasks/Services/AuthServices.dart';
+import 'package:http/http.dart' as http;
+import 'package:todo_tasks/Services/Globals.dart';
+import '../Screens/HomeScreen.dart';
 import 'RegistrationScreen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -144,5 +149,18 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  loginPressed() {}
+  loginPressed() async {
+    if (_email.isNotEmpty && _password.isNotEmpty) {
+      http.Response response = await AuthServices.login(_email, _password);
+      Map responseMap = jsonDecode(response.body);
+      if (response.statusCode == 200) {
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => const HomeScreen()));
+      }else{
+        errorSnackBar(context, responseMap.values.first);
+      }
+    }else{
+      errorSnackBar(context, 'Enter all Required Fields');
+    }
+  }
 }
