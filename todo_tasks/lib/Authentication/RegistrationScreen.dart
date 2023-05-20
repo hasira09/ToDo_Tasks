@@ -174,14 +174,15 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     if (emailValid) {
       http.Response response = await AuthServices.register(
           _name, _email, _password);
-      Map responseMap = jsonDecode(response.body);
+
       if (response.statusCode==200){
         Navigator.push(
             context,
             MaterialPageRoute(
                 builder: (context) => const HomeScreen()));
       }else{
-        errorSnackBar(context, responseMap.values.first[0]);
+        String responseBody = response.body;
+        errorSnackBar(context, 'Registration failed. Please try again.');
       }
     }else{
       errorSnackBar(context, 'Email not Valid');
